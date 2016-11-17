@@ -199,7 +199,7 @@
         return {
           latitude: parseFloat(item.Latitude),
           longitude: parseFloat(item.Longitude),
-          name: item.City + '<br/>Population: ' + numberWithCommas(item.Population) + '<br/>Reported 0 or no hate crimes in 2015.',
+          name: item.City + '<br/>Population: ' + numberWithCommas(item.Population) + '<br/>' + (item['2015Incidents'] === 'DNR' ? 'Did not report hate crimes' : 'Reported 0 hate crimes') + ' in 2015.',
 
           radius: scale(item.Population)
         }
