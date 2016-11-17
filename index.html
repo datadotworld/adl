@@ -16,7 +16,7 @@
     <div class="panel-heading">    Hate crimes reported per capita in 2015, &amp; cities that did not report or reported 0
   </div>
     <div class="panel-body">
-      <div id="container1" style="width: 1200px; height: 675px; position: relative;"></div>
+      <div id="container1" style="width: 100%; height: 100vh; max-height: 700px; position: relative;"></div>
     </div>
   </div>
 </div>
@@ -29,23 +29,11 @@
     // static data
     d3.csv('normalized_state_crime.csv', function (err, data) {
 
-    var series = {
-        "IT.BO": 75, "IT.CS": 150, "IT.RM": 100, "IT.PE": 200
-    };
-
     var valuesByState = {}
     var values = data.forEach(function(data) {
       valuesByState[data.Code] = parseFloat(data.Normalized)
     })
-      /* load data form JSON
-     d3.json('/path/to/my.json', function(series){
-        // and write all code from this example here
-     });
-     */
 
-    // Datamaps expect data in format:
-    // { "USA": { "fillColor": "#42a844", numberOfWhatever: 75},
-    //   "FRA": { "fillColor": "#8dc386", numberOfWhatever: 43 } }
     var dataset = {};
 
     // We need to colorize every country based on "numberOfWhatever"
@@ -93,7 +81,7 @@
         return {
           latitude: parseFloat(item.Latitude),
           longitude: parseFloat(item.Longitude),
-          name: item.City + '<br/>Population: ' + item.Population + '<br/>Reported 0 or no hate crimes in 2015.',
+          name: item.City + '<br/>Population: ' + numberWithCommas(item.Population) + '<br/>Reported 0 or no hate crimes in 2015.',
 
           radius: scale(item.Population)
         }
@@ -102,6 +90,10 @@
       map.bubbles(bubbles)
   })
 })
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 </script>
 
