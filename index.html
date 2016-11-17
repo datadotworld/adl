@@ -1,78 +1,109 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>Non-Contiguous Cartogram</title>
-<style>
-
-.land {
-  fill: #fff;
-  stroke: #ccc;
-}
-
-.state {
-  fill: #ccc;
-  stroke: #666;
-}
-
-</style>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <style>
+        .active { fill: blue !important;}
+        /*.datamaps-key dt, .datamaps-key dd {float: none !important;}
+        .datamaps-key {right: -50px; top: 0;}*/
+    </style>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+</head>
 <body>
-<script src="//d3js.org/d3.v3.min.js"></script>
-<script src="//d3js.org/topojson.v1.min.js"></script>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">    Hate crimes reported per capita in 2015 &amp; cities that did not report or reported 0
+  </div>
+    <div class="panel-body">
+      <div id="container1" style="width: 1200px; height: 675px; position: relative;"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.8/datamaps.all.hires.js"></script>
 <script>
+    // static data
+    d3.csv('normalized_state_crime.csv', function (err, data) {
 
-// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
-var valueById = [
-   NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
-  .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
-  .159, .169, .177, .141, .163, .117, .182, .153, .195, .189,
-  .134, .163, .133, .151, .145, .130, .139, .169, .164, .175,
-  .135, .152, .169,  NaN, .132, .167, .139, .184, .159, .140,
-  .146, .157,  NaN, .139, .183, .160, .143
-];
-d3.csv('normalized_state_crime.csv', function (err, data) {
-  console.log('data!', data)
-  var valuesByState = {}
-  var values = data.forEach(function(data) {
-    valuesByState[data.Code] = data
+    var series = {
+        "IT.BO": 75, "IT.CS": 150, "IT.RM": 100, "IT.PE": 200
+    };
+
+    var valuesByState = {}
+    var values = data.forEach(function(data) {
+      valuesByState[data.Code] = parseFloat(data.Normalized)
+    })
+      /* load data form JSON
+     d3.json('/path/to/my.json', function(series){
+        // and write all code from this example here
+     });
+     */
+
+    // Datamaps expect data in format:
+    // { "USA": { "fillColor": "#42a844", numberOfWhatever: 75},
+    //   "FRA": { "fillColor": "#8dc386", numberOfWhatever: 43 } }
+    var dataset = {};
+
+    // We need to colorize every country based on "numberOfWhatever"
+    // colors should be uniq for every value.
+    // For this purpose we create palette(using min/max series-value)
+    var onlyValues = Object.keys(valuesByState).map(function(key){ return valuesByState[key] });
+    var minValue = Math.min.apply(null, onlyValues),
+            maxValue = Math.max.apply(null, onlyValues);
+
+    // create color palette function
+    // color can be whatever you wish
+    var paletteScale = d3.scale.linear()
+            .domain([minValue,maxValue])
+            .range(["#EFEFFF","#02386F"]); // blue color
+
+    // fill dataset in appropriate format
+    Object.keys(valuesByState).forEach(function(key){ //
+        // item example value ["USA", 70]
+        var iso = key,
+                value = valuesByState[key];
+        dataset[iso] = { numberOfThings: value, fillColor: paletteScale(value) };
+    });
+
+    var map = new Datamap({
+        element: document.getElementById('container1'),
+        scope: 'usa',
+        fills: { defaultFill: '#00B88D' },
+        data: dataset,
+        geographyConfig: {
+            borderColor: '#DEDEDE',
+            highlightBorderWidth: 1,
+            popupOnHover: false,
+            highlightFillColor: function(geo) {
+                return geo['fillColor'] || '#F5F5F5';
+            },
+        }
+    });
+
+    d3.csv('dnr.csv', function (err, data) {
+      var scale = d3.scale.linear()
+        .domain([100000, 999307])
+        .range([5, 25])
+
+      var bubbles = data.map(function(item) {
+        return {
+          latitude: parseFloat(item.Latitude),
+          longitude: parseFloat(item.Longitude),
+          name: item.City + '<br/>Population: ' + item.Population + '<br/>Reported 0 or no hate crimes in 2015.',
+
+          radius: scale(item.Population)
+        }
+      })
+
+      map.bubbles(bubbles)
   })
-  var svg = d3.select("body").append("svg")
-      .attr("width", 960)
-      .attr("height", 500);
-
-  var path = d3.geo.path();
-
-  d3.json("us.topo.json", function(error, us) {
-    if (error) throw error;
-
-    svg.append("path")
-        .datum(topojson.feature(us, us.objects.usa))
-        .attr("class", "land")
-        .attr("d", path);
-
-    svg.selectAll(".state")
-        .data(topojson.feature(us, us.objects.usa).features)
-      .enter().append("path")
-        .attr("class", "state")
-        .attr("d", path)
-        .attr("transform", function(d) {
-          if (!valuesByState[d.id]) {
-            console.log('could not get data for', d)
-            return
-          }
-          var scale = Math.sqrt(parseFloat(valuesByState[d.id].Normalized) / 5)
-          console.log(valuesByState[d.id].Code, scale)
-          var centroid = path.centroid(d),
-              x = centroid[0],
-              y = centroid[1];
-          return "translate(" + x + "," + y + ")"
-          + "scale(" + scale + ")"
-              + "translate(" + -x + "," + -y + ")";
-        })
-        .style("stroke-width", function(d) {
-          var scale = Math.sqrt(parseFloat(valuesByState[d.id].Normalized) / 10)
-
-          return 1 / scale
-        });
-  });
-});
+})
 
 </script>
+
+</body>
+</html>
