@@ -22,6 +22,36 @@
         .panel-heading h4 {
           text-align:  center;
         }
+        .key {
+          width: 33%;
+          height: 150px;
+        }
+        .key-left {
+          margin-left: 10%;
+          float: left;
+        }
+        .key-right {
+          float: right;
+          margin-right: 10%;
+        }
+        .key-container {
+          border: 1px solid #CCC;
+          border-top: 2px solid #00B88D;
+          background-color: rgba(0,0,0,0.05);
+          padding: 15px;
+          height: 100%;
+        }
+        .key h5 {
+          text-align: center;
+        }
+        .key svg text {
+          font-weight: bold;
+          font-size: 11px;
+        }
+        .key svg {
+          display: block;
+          margin: 0 auto;
+        }
         /*.datamaps-key dt, .datamaps-key dd {float: none !important;}
         .datamaps-key {right: -50px; top: 0;}*/
     </style>
@@ -35,6 +65,68 @@
   </div>
     <div class="panel-body">
       <div id="container1" style="width: 100%; height: 100vh; min-height: 400px; max-height: 700px; position: relative;"></div>
+      <div class="key key-left">
+          <div class="key-container">
+            <h5>Did Not Report (DNR) or cities or reported 0 hate crimes (cities > 100,000 pop.)</h5>
+            <svg width="200" height="75">
+              <text x="47" text-anchor="middle" y="15">1,000,000</text>
+              <text x="173" text-anchor="middle" y="15">100,000</text>
+              <circle cx="47" cy="47" r="25" fill="#00B88D" stroke="white" stroke-width="2"></circle>
+              <circle cx="173" cy="47" r="5" fill="#00B88D" stroke="white" stroke-width="2" ></circle>
+            </svg>
+          </div>
+      </div>
+      <div class="key key-right">
+          <div class="key-container">
+            <h5>Hate crimes per 100,000 pop.</h5>
+            <svg width="200" height="75">
+              <g style="transform:translate(-520px,-550px)">
+                 <text x="530" y="580" style="text-anchor: middle; fill: rgb(51, 51, 51);">0</text>
+                 <text x="705" y="580" style="text-anchor: middle; fill: rgb(51, 51, 51);">6.09</text>
+                 <rect x="520" y="590" width="5" height="10" fill="#f7fbff" stroke="none"></rect>
+                 <rect x="525" y="590" width="5" height="10" fill="#f2f6fd" stroke="none"></rect>
+                 <rect x="530" y="590" width="5" height="10" fill="#edf2fa" stroke="none"></rect>
+                 <rect x="535" y="590" width="5" height="10" fill="#e8edf8" stroke="none"></rect>
+                 <rect x="540" y="590" width="5" height="10" fill="#e3e8f5" stroke="none"></rect>
+                 <rect x="545" y="590" width="5" height="10" fill="#dee4f3" stroke="none"></rect>
+                 <rect x="550" y="590" width="5" height="10" fill="#d9dff0" stroke="none"></rect>
+                 <rect x="555" y="590" width="5" height="10" fill="#d3dbee" stroke="none"></rect>
+                 <rect x="560" y="590" width="5" height="10" fill="#ced6eb" stroke="none"></rect>
+                 <rect x="565" y="590" width="5" height="10" fill="#c9d2e9" stroke="none"></rect>
+                 <rect x="570" y="590" width="5" height="10" fill="#c4cde6" stroke="none"></rect>
+                 <rect x="575" y="590" width="5" height="10" fill="#bfc9e4" stroke="none"></rect>
+                 <rect x="580" y="590" width="5" height="10" fill="#bac4e1" stroke="none"></rect>
+                 <rect x="585" y="590" width="5" height="10" fill="#b5c0df" stroke="none"></rect>
+                 <rect x="590" y="590" width="5" height="10" fill="#b0bbdc" stroke="none"></rect>
+                 <rect x="595" y="590" width="5" height="10" fill="#abb7da" stroke="none"></rect>
+                 <rect x="600" y="590" width="5" height="10" fill="#a6b2d7" stroke="none"></rect>
+                 <rect x="605" y="590" width="5" height="10" fill="#a1aed5" stroke="none"></rect>
+                 <rect x="610" y="590" width="5" height="10" fill="#9caad2" stroke="none"></rect>
+                 <rect x="615" y="590" width="5" height="10" fill="#97a5d0" stroke="none"></rect>
+                 <rect x="620" y="590" width="5" height="10" fill="#92a1cd" stroke="none"></rect>
+                 <rect x="625" y="590" width="5" height="10" fill="#8c9dcb" stroke="none"></rect>
+                 <rect x="630" y="590" width="5" height="10" fill="#8799c8" stroke="none"></rect>
+                 <rect x="635" y="590" width="5" height="10" fill="#8294c6" stroke="none"></rect>
+                 <rect x="640" y="590" width="5" height="10" fill="#7d90c3" stroke="none"></rect>
+                 <rect x="645" y="590" width="5" height="10" fill="#778cc1" stroke="none"></rect>
+                 <rect x="650" y="590" width="5" height="10" fill="#7288bf" stroke="none"></rect>
+                 <rect x="655" y="590" width="5" height="10" fill="#6d84bc" stroke="none"></rect>
+                 <rect x="660" y="590" width="5" height="10" fill="#6780ba" stroke="none"></rect>
+                 <rect x="665" y="590" width="5" height="10" fill="#627cb7" stroke="none"></rect>
+                 <rect x="670" y="590" width="5" height="10" fill="#5c78b5" stroke="none"></rect>
+                 <rect x="675" y="590" width="5" height="10" fill="#5674b2" stroke="none"></rect>
+                 <rect x="680" y="590" width="5" height="10" fill="#5070b0" stroke="none"></rect>
+                 <rect x="685" y="590" width="5" height="10" fill="#4a6cad" stroke="none"></rect>
+                 <rect x="690" y="590" width="5" height="10" fill="#4468ab" stroke="none"></rect>
+                 <rect x="695" y="590" width="5" height="10" fill="#3d64a8" stroke="none"></rect>
+                 <rect x="700" y="590" width="5" height="10" fill="#3660a6" stroke="none"></rect>
+                 <rect x="705" y="590" width="5" height="10" fill="#2e5ca3" stroke="none"></rect>
+                 <rect x="710" y="590" width="5" height="10" fill="#2558a1" stroke="none"></rect>
+                 <rect x="715" y="590" width="5" height="10" fill="#1a559e" stroke="none"></rect>
+              </g>
+            </svg>
+          </div>
+      </div>
     </div>
     <div class="panel-footer">
       <div class="pull-left">
